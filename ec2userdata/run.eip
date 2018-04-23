@@ -1,0 +1,6 @@
+#!/bin/bash
+if [ -f $EIPFILE ] ; then
+   echo "Running EIP association ..."
+   EIPID=$(cat $EIPFILE | awk '{print $1}')
+   $AWS ec2 associate-address --instance-id $INSTID --allocation-id $EIPID --allow-reassociation --region $REGION
+fi

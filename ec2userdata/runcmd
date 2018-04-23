@@ -1,0 +1,31 @@
+#!/bin/bash
+#   userdata for tomcat server
+#   Usage $0 VOLID it is passed from the userdata
+
+RUNDIR=`dirname $0`
+. $RUNDIR/global.env
+
+$RUNDIR/run.eip
+
+$RUNDIR/run.crusers
+#  Mount additional ebs or efs filesystem if needed
+$RUNDIR/run.mountfs
+
+if [ -f /sbin/shibd ] ; then
+   echo "Startup Shibd ..."
+   systemctl restart shibd
+fi
+#
+if [ -f $APPPATH/tomcat/bin/startup.sh ] ; then
+   echo "Startup Tomcat ..."
+   su - appadmin -c "startup.sh"
+fi
+#
+if [ -d /etc/httpd/conf.d ] ; then
+   echo "Restarting Apache ..."
+   systemctl restart httpd
+fi
+
+umount /share
+
+echo "------------- Done. -----------------"
