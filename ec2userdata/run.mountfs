@@ -13,6 +13,14 @@ mountebs()
 
 $AWS ec2 attach-volume --device $DEVINFO --volume-id $VOLID --instance-id $INSTID --region=$REGION
 sleep 20
+state=$($AWS ec2 describe-volumes --region $REGION --volume-ids $VOLID --query  "Volumes[].Attachments[].State" --output text)
+if [ "$state" == "attached" ] ; then
+   echo "$VOLID attached successfully" 
+else
+   echo "$state ... Waitting another 40s for $VOLID to attach"
+   sleep 40
+   $AWS ec2 describe-volumes --region $REGION --volume-ids $VOLID --query  "Volumes[].Attachments[].State" --output text
+fi
 
 echo "Checking if the $DEVINFO has been initialized ..."
 cnt=`file -s $DEVINFO | grep -c ': data'`
