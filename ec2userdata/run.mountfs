@@ -8,7 +8,7 @@ mountebs()
   local mountpoint=$3
   local filecnt=$4
 
-  devarray=(/dev/xvdh /dev/xvdi /dev/xvdj /dev/xvdk /dev/xvhl)
+  devarray=(/dev/xvdh /dev/xvdi /dev/xvdj /dev/xvdk /dev/xvhl /dev/xvhm /dev/xvhn /dev/xvho /dev/xvhp /dev/xvhq)
   DEVINFO=${devarray[$filecnt]}
 
 $AWS ec2 attach-volume --device $DEVINFO --volume-id $VOLID --instance-id $INSTID --region=$REGION
